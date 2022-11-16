@@ -1,0 +1,55 @@
+<div class="product-detail" *ngIf="product">
+  <div class="row">
+    <div class="col-12">
+      <h2>Detalles: {{ product.name | pascalKebabCase }}</h2>
+    </div>
+    <div class="col-12">
+      <p>Id: {{ product.id }}</p>
+    </div>
+    <div class="col-12">
+      <div class="form-group">
+        <label for="name">Nombre</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          [(ngModel)]="product.name"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="row mb-5">
+    <div class="col-4">
+      <label for="sellIn">Caducidad</label>
+      <input
+        type="number"
+        class="form-control"
+        id="sellIn"
+        [(ngModel)]="product.sellIn"
+      />
+    </div>
+    <div class="col-4">
+      <label for="quality">Calidad</label>
+      <input
+        type="number"
+        class="form-control"
+        id="quality"
+        [(ngModel)]="product.quality"
+      />
+    </div>
+    <div class="col-4">
+      <label for="type">Tipo</label>
+      <select class="custom-select" [(ngModel)]="product.type" id="type">
+        <option *ngFor="let type of types">{{ type }}</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <button class="btn btn-dark" (click)="goBack()">Volver</button>
+    </div>
+    <div class="col-6 d-flex justify-content-end">
+      <button class="btn btn-primary" (click)="save()">Guardar</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+.dashboard {
+  h3{
+    text-align: center;
+  }
+  .product {
+    &-card {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      align-content: center;
+      text-overflow: ellipsis;
+      margin: 0;
+      padding: 0;
+      border: 1px solid gray;
+      padding: 1rem 0;
+      cursor: pointer;
+      &:hover{
+        background-color: lightblue;
+      }
+      &.bad{
+        background-color: lightcoral;
+      }
+      &.good{
+        background-color: lightgreen;
+      }
+    }
+  }
+}
