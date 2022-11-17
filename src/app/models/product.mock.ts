@@ -7,5 +7,3 @@ export const mockProducts: Product[] = [
   { id: 14, name: 'Sal', sellIn: 1, quality: 80, type: ProductType.immutable },
   { id: 15, name: 'Jamón', sellIn: 10, quality: 20, type: ProductType.cured },
 ];
-
-//4 0
