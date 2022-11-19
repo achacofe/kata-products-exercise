@@ -148,74 +148,91 @@ describe('DashboardComponent', () => {
         expect(cardYogurt[3].nativeElement.className).toBe('product-card good');
       }));
 
-      xit('should Q of a product is never greater than 50 except the Immutable', fakeAsync(() => {
-        const cardYogurt: DebugElement[] = fixture.debugElement.queryAll(By.css('.product-card'));
-        testClickButton(26, closeButton);
+      it('should Q of a product is never greater than 50 except the Immutable that neither degrade nor modify their R.', fakeAsync(() => {
+        testClickButton(30, closeButton);
         flush();
         fixture.detectChanges();
 
-        expect(cardYogurt[1].nativeElement.className).toBe('product-card good');
-        expect(cardYogurt[3].nativeElement.className).toBe('product-card good');
+        Array.from(component.products).forEach((product, index) => {
+          if(product.type === ProductType.immutable) {
+            expect(product.quality).toBe(mockProducts[index].quality);
+            expect(product.sellIn).toBe(mockProducts[index].sellIn);
+          } else {
+            expect(product.quality).not.toBeGreaterThan(50);
+          }
+        });
       }));
 
+      describe('Cured products increase their Q as they age', () => {
 
-    // it('should be accessible through the template', () => {
-    //   // is it a good idea to call the function?
-    //   // Not really, as we just want to check that it can be accessed.
+        it('should Q increases by 2 when less than 10 days remain', fakeAsync(() => {
+          component.products.map((product) => {
+            if(product.type === ProductType.cured) {
+              product.sellIn = 10;
+            }
+          });
+          testClickButton(1, closeButton);
+          flush();
+          fixture.detectChanges();
 
-    //   serviceSpy.and.returnValue(of(mockProducts));
-    //   fixture.detectChanges();
+          Array.from(component.products).forEach((product, index) => {
+            if(product.type === ProductType.cured) {
+              expect(product.quality).toBe(mockProducts[index].quality + 2);
+            }
+          });
+        }));
 
-    //   const btn = fixture.debugElement.query(By.css('.btn-primary'));
-    //   btn.nativeElement.click();
+        it('should Q increases by 3 when there are 5 days or less', fakeAsync(() => {
+          component.products.map((product) => {
+            if(product.type === ProductType.cured) {
+              product.sellIn = 5;
+            }
+          });
+          testClickButton(1, closeButton);
+          flush();
+          fixture.detectChanges();
 
-    //   expect(spySimulation).toHaveBeenCalled();
-    // });
+          Array.from(component.products).forEach((product, index) => {
+            if(product.type === ProductType.cured) {
+              expect(product.quality).toBe(mockProducts[index].quality + 3);
+            }
+          });
+        }));
 
-    // it('should be accessible through the template', () => {
-    //   // is it a good idea to call the function?
-    //   mockProducts[4].sellIn = 5;
-    //   fixture.detectChanges();
+        it('should Q increases by 1 when more are missing', fakeAsync(() => {
+          component.products.map((product) => {
+            if(product.type === ProductType.cured) {
+              product.sellIn = 20;
+            }
+          });
+          testClickButton(1, closeButton);
+          flush();
+          fixture.detectChanges();
 
-    //   serviceSpy.and.returnValue(of(mockProducts));
-    //   fixture.detectChanges();
+          Array.from(component.products).forEach((product, index) => {
+            if(product.type === ProductType.cured) {
+              expect(product.quality).toBe(mockProducts[index].quality + 1);
+            }
+          });
+        }));
 
-    //   expect(mockProducts[4].quality).toBe(20);
+        it('should Q falls to 0 when R falls from 0', fakeAsync(() => {
+          component.products.map((product) => {
+            if(product.type === ProductType.cured) {
+              product.sellIn = 0;
+            }
+          });
+          testClickButton(1, closeButton);
+          flush();
+          fixture.detectChanges();
 
-    //   mockProducts[4].sellIn = 0;
-    //   fixture.detectChanges();
-
-    //   serviceSpy.and.returnValue(of(mockProducts));
-    //   fixture.detectChanges();
-
-    //   expect(mockProducts[4].quality).toBe(20);
-    // });
-
-    // it('should be accessible through the template', () => {
-    //   // is it a good idea to call the function?
-    //     mockProducts[0].sellIn = 1;
-    //     fixture.detectChanges();
-
-    //     serviceSpy.and.returnValue(of(mockProducts));
-    //     fixture.detectChanges();
-
-    //     console.log('mockProducts[0]: ', mockProducts[0]);
-    //     // Random 10 or 22 - 10
-    //     expect(mockProducts[0].quality).toBe(22);
-    // });
-
-    // it('should be accessible through the template', () => {
-    //   // is it a good idea to call the function?
-    //   mockProducts[1].sellIn = 0;
-    //   fixture.detectChanges();
-
-    //   serviceSpy.and.returnValue(of(mockProducts));
-    //   fixture.detectChanges();
-
-
-    //   expect(mockProducts[1].quality).toBe(1);
-    // });
-
+          Array.from(component.products).forEach(product => {
+            if(product.type === ProductType.cured) {
+              expect(product.quality).toBe(0);
+            }
+          });
+        }));
+      });
     // TODO: complete functional test
 
   });
